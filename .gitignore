@@ -3,3 +3,4 @@ __pycache__/
 *.py[cod]
 conf/*.xlsx
 conf/index.html
+logo-teto.png

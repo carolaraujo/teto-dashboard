@@ -20,35 +20,43 @@ MODELO = r"""<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>TETO PE – Matriz de Expansão</title>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
-:root{--bg:#fff;--fg:#1c1c1c;--card:#f1f5f4}@media(prefers-color-scheme:dark){:root{--bg:#171717;--fg:#eee;--card:#262626}}
-body{margin:auto;padding:16px;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg);max-width:1200px}
-h1{font-size:1.5rem}select,button{padding:6px 10px;margin:0 6px 6px 0;background:var(--card);color:var(--fg);border:1px solid #8884;border-radius:6px}
-nav button{font-size:1rem}nav button.on{border-color:#1976d2;font-weight:700}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0}
-.c{background:var(--card);padding:10px 14px;border-radius:8px}.c small{display:block;opacity:.7}.c b{font-size:1.6rem}
-.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:10px}#gm,#om{height:560px}.t{overflow-x:auto}
-table{border-collapse:collapse;width:100%}td,th{padding:5px 8px;border-bottom:1px solid #8884;text-align:left;font-size:.9rem}a{color:#1976d2}
-small,footer{opacity:.7}footer{margin:16px 0;font-size:.85rem}
+:root{--bg:#f4f6f8;--fg:#1c2530;--card:#fff;--bd:#e1e6eb;--ac:#1565c0}
+@media(prefers-color-scheme:dark){:root{--bg:#12161b;--fg:#e8edf2;--card:#1b222a;--bd:#2c3640;--ac:#64b5f6}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,"Segoe UI",sans-serif}
+header{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;padding:22px 5vw}header h1{margin:0;font-size:1.6rem}header small{opacity:.85}
+main{max-width:1400px;margin:auto;padding:16px 5vw}#f{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+select,button{font:inherit;padding:7px 12px;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:8px;cursor:pointer}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}nav button{border-radius:999px}nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.c,.p{background:var(--card);border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 3px #0001}.c{padding:12px 16px}
+.c small{display:block;opacity:.7}.c b{font-size:1.8rem;color:var(--ac)}.p{padding:8px 10px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:850px){.g2{grid-template-columns:1fr}}
+.ch{height:360px}#gm,#om{height:600px;border-radius:12px;overflow:hidden}.t{overflow-x:auto}
+table{border-collapse:collapse;width:100%}td,th{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:left;font-size:.9rem}
+th{position:sticky;top:0;background:var(--card)}tr:nth-child(even) td{background:#8881}a{color:var(--ac)}
+.bd{display:inline-block;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 14px;margin:8px 0;font-weight:600}
+small,footer{opacity:.75}footer{padding:8px 5vw 24px;font-size:.85rem}#det{margin:10px 0;min-height:24px}
 </style></head><body>
-<h1>Matriz de Expansão – TETO Pernambuco</h1>
+<header><h1>Matriz de Expansão – TETO Pernambuco</h1><small>Mapeamento de comunidades · dados de __GERADO__</small></header><main>
 <div id="f"></div><small id="nota"></small><div id="kpi" class="g"></div>
 <nav><button data-t="viz" class="on">📊 Visão geral</button><button data-t="mapa">🗺️ Mapa</button><button data-t="tab">📋 Tabela</button><button data-t="pend">⚠️ Pendências</button></nav>
-<section id="viz"><div class="g2"><div id="c1"></div><div id="c2"></div><div id="c3"></div>
-<div><select id="eixo"><option>Década de formação</option><option>Ano de formação</option><option>Demanda construtiva</option></select><div id="c4"></div></div></div></section>
+<section id="viz"><div class="g2"><div class="p"><select id="selmun"></select><div id="c1" class="ch"></div></div><div class="p"><div id="c2" class="ch"></div></div>
+<div class="p"><div id="c3" class="ch"></div></div><div class="p"><select id="eixo"><option>Enquete por status</option><option>Visitas por ano</option><option>Completude dos dados</option></select><div id="c4" class="ch"></div></div></div></section>
 <section id="mapa" style="display:none"><select id="por"><option value="status">Colorir por status</option><option value="cat">Colorir por categoria</option></select>
-<small id="sem"></small><div id="gm"></div><div id="om"></div><div id="leg"></div><div id="det">Clique em um ponto do mapa para ver os detalhes.</div></section>
+<div id="sem" class="bd"></div><div id="gm"></div><div id="om"></div><div id="leg"></div><div id="det">Clique em um ponto do mapa para ver os detalhes.</div></section>
 <section id="tab" style="display:none"><div class="t" id="tb"></div></section>
 <section id="pend" style="display:none"><small>Itens a corrigir na base (aba PENDENCIAS da planilha).</small><div class="t" id="pd"></div></section>
-<footer>Dados atualizados em __GERADO__. Só aparecem no mapa as comunidades com coordenadas.</footer>
+</main><footer>Dados atualizados em __GERADO__. Só aparecem no mapa as comunidades com coordenadas.</footer>
 <script>
-const D=__DATA__,P=__PEND__,KEY="__CHAVE__",NI="Não informado",$=i=>document.getElementById(i),
+const D=__DATA__,P=__PEND__,KEY="__CHAVE__",GM=!!KEY&&location.protocol!=="file:",NI="Não informado",$=i=>document.getElementById(i),
 F=[["mun","Município"],["status","Status padronizado"],["cat","Categoria"],["lid","Liderança"],["mv","Origem MV"],["fund","Situação fundiária"],["risco","Risco ambiental"],["dem","Demanda construtiva"]],
 sel={},COR={"Já trabalhamos":"#2e7d32","Já visitamos":"#1976d2","Não visitamos":"#e65100",[NI]:"#9e9e9e"},
 PAL=["#1976d2","#2e7d32","#e65100","#8e24aa","#00838f","#c62828","#6d4c41","#9e9e9e"],CATS=[...new Set(D.map(d=>d.cat))].sort();
 const cor=(d,p)=>p==="status"?COR[d.status]||"#888":PAL[CATS.indexOf(d.cat)%PAL.length],vz=[];
-let aba="viz",M,MK=[],IW,pronto=!KEY;
+let aba="viz",M,MK=[],IW,TOP,pronto=!GM;
 F.forEach(([k,t])=>{const o=[...new Set(D.map(d=>d[k]))].sort();if(o.length<2&&o[0]===NI){vz.push(t);return}
  const s=document.createElement("select");s.innerHTML=`<option value="">${t}: todos</option>`+o.map(v=>`<option>${v}</option>`).join("");
- s.onchange=()=>{sel[k]=s.value;draw()};$("f").append(s)});
+ s.onchange=()=>k==="mun"?setMun(s.value):(sel[k]=s.value,draw());if(k==="mun")TOP=s;$("f").append(s)});
 if(vz.length)$("nota").textContent="Ainda sem dados na planilha: "+vz.join(", ")+".";
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{aba=b.dataset.t;
  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
@@ -58,7 +66,11 @@ const cnt=(a,k)=>Object.entries(a.reduce((m,d)=>(m[d[k]]=(m[d[k]]||0)+1,m),{})),
 info=d=>`<b>${d.nome}</b><br>${d.mun} · ${d.status}<br>Categoria: ${d.cat} · Liderança: ${d.lid}<br>Famílias: ${d.fam??"—"}<br>
 <a target="_blank" href="https://www.google.com/maps?q=${d.lat},${d.lon}">Google Maps</a>`+(d.earth?` · <a target="_blank" href="${d.earth}">Google Earth</a>`:""),
 tabela=(h,l)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr>${l.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}</table>`;
-if(KEY){window.gok=()=>{pronto=true;draw()};const s=document.createElement("script");
+function setMun(v){sel.mun=v;$("selmun").value=v;if(TOP)TOP.value=v;draw()}
+const nm=cnt(D.filter(d=>d.mun!==NI),"mun").sort((a,b)=>b[1]-a[1]);
+$("selmun").innerHTML='<option value="">Todos os municípios</option>'+nm.map(([n,c])=>`<option value="${n}">${n} (${c})</option>`).join("");
+$("selmun").onchange=e=>setMun(e.target.value);
+if(GM){window.gok=()=>{pronto=true;draw()};const s=document.createElement("script");
  s.src=`https://maps.googleapis.com/maps/api/js?key=${KEY}&callback=gok`;s.async=true;document.head.append(s)}
 function draw(){
  const r=D.filter(d=>F.every(([k])=>!sel[k]||d[k]===sel[k])),id=r.filter(d=>d.idade!=null);
@@ -67,28 +79,33 @@ function draw(){
  ["Idade média (anos)",id.length?(id.reduce((s,d)=>s+d.idade,0)/id.length).toFixed(1):"—"]].map(([t,v])=>`<div class="c"><small>${t}</small><b>${v}</b></div>`).join("");
  const L={paper_bgcolor:"rgba(0,0,0,0)",plot_bgcolor:"rgba(0,0,0,0)",font:{color:getComputedStyle(document.body).color},margin:{t:40,l:50,r:10,b:40}};
  if(aba==="viz"){
-  const m=cnt(r,"mun").sort((a,b)=>b[1]-a[1]),pie=(i,t,k,cf)=>{const e=cnt(r,k);
-   Plotly.react(i,[{type:"pie",hole:.5,labels:e.map(x=>x[0]),values:e.map(x=>x[1]),marker:cf?{colors:e.map(x=>cf(x[0]))}:{}}],{...L,title:t})};
-  Plotly.react("c1",[{type:"bar",x:m.map(e=>e[0]),y:m.map(e=>e[1]),text:m.map(e=>e[1]),marker:{color:"#1976d2"}}],{...L,title:"Comunidades por município"});
-  pie("c2","Status padronizado","status",x=>COR[x]||"#888");pie("c3","Situação fundiária","fund",null);
-  const ev=$("eixo").value,e=ev==="Demanda construtiva"?cnt(r.filter(d=>d.dem!==NI),"dem"):
-   cnt(r.filter(d=>d.ano).map(d=>({p:ev[0]==="D"?Math.floor(d.ano/10)*10+"s":String(d.ano)})),"p").sort();
-  if(!e.length){Plotly.purge("c4");$("c4").textContent="Sem dados preenchidos para este gráfico."}
-  else Plotly.react("c4",[{type:"bar",orientation:"h",y:e.map(x=>x[0]),x:e.map(x=>x[1]),text:e.map(x=>x[1]),marker:{color:"#1976d2"}}],
-   {...L,title:"Comunidades por "+ev.toLowerCase(),yaxis:{type:"category",autorange:"reversed"},xaxis:{dtick:1}})}
+  const rm=D.filter(d=>F.every(([k])=>k==="mun"||!sel[k]||d[k]===sel[k])),m=cnt(rm,"mun").sort((a,b)=>b[1]-a[1]),C={responsive:true,displayModeBar:false},lay=(t,o)=>({...L,title:{text:t,x:0,font:{size:15}},...o}),
+  ST=["Já trabalhamos","Já visitamos","Não visitamos"],LD=["Sim","Não",NI],LC={Sim:"#2e7d32",Não:"#e65100",[NI]:"#bdbdbd"},s=cnt(r,"status"),ev=$("eixo").value;
+  Plotly.react("c1",[{type:"bar",x:m.map(e=>e[0]),y:m.map(e=>e[1]),text:m.map(e=>e[1]),marker:{color:m.map(e=>!sel.mun||e[0]===sel.mun?"#1976d2":"#90a4ae")}}],lay("Comunidades por município"+(sel.mun?` — ${sel.mun}: ${r.length}`:"")),C);
+  if(!$("c1").dataset.on){$("c1").dataset.on=1;$("c1").on("plotly_click",e=>{const x=e.points[0].x;if(x!==NI)setMun(sel.mun===x?"":x)})}
+  Plotly.react("c2",[{type:"pie",hole:.55,labels:s.map(x=>x[0]),values:s.map(x=>x[1]),marker:{colors:s.map(x=>COR[x[0]]||"#888")}}],lay("Status padronizado"),C);
+  Plotly.react("c3",LD.map(l=>({type:"bar",name:"Liderança: "+l,x:ST,y:ST.map(t=>r.filter(d=>d.status===t&&d.lid===l).length),marker:{color:LC[l]}})),
+   lay("Liderança por status",{barmode:"stack",legend:{orientation:"h"}}),C);
+  let tr,o={};
+  if(ev==="Enquete por status"){tr=[["Sim",1,"#2e7d32"],["Não",0,"#e65100"]].map(([n,v,c])=>({type:"bar",name:"Enquete: "+n,x:ST,y:ST.map(t=>r.filter(d=>d.status===t&&d.enq===v).length),marker:{color:c}}));o={barmode:"stack",legend:{orientation:"h"}}}
+  else if(ev==="Visitas por ano"){const e=cnt(r.filter(d=>d.visita),"visita").sort();tr=[{type:"bar",x:e.map(x=>x[0]),y:e.map(x=>x[1]),text:e.map(x=>x[1]),marker:{color:"#1976d2"}}];o={xaxis:{type:"category"}}}
+  else{const f=[["Coordenadas",d=>d.lat!=null],["Nº de famílias",d=>d.fam!=null],["Ano de formação",d=>d.ano!=null],["Liderança informada",d=>d.lid!==NI],
+    ["Situação fundiária",d=>d.fund!==NI],["Risco ambiental",d=>d.risco!==NI],["Demanda construtiva",d=>d.dem!==NI]].map(([n,g])=>[n,r.length?Math.round(100*r.filter(g).length/r.length):0]);
+   tr=[{type:"bar",orientation:"h",y:f.map(x=>x[0]),x:f.map(x=>x[1]),text:f.map(x=>x[1]+"%"),marker:{color:f.map(x=>x[1]<30?"#e65100":x[1]<70?"#f9a825":"#2e7d32")}}];o={yaxis:{autorange:"reversed"},xaxis:{range:[0,100],ticksuffix:"%"}}}
+  Plotly.react("c4",tr,lay(ev,o),C)}
  if(aba==="mapa"){
   const g=r.filter(d=>d.lat!=null),p=$("por").value,ks=[...new Set(g.map(d=>p==="status"?d.status:d.cat))];
-  $("sem").textContent=` ${g.length} de ${r.length} comunidades filtradas têm coordenadas.`;
+  $("sem").textContent=`${sel.mun?sel.mun+": ":""}${r.length} comunidade${r.length===1?"":"s"} · ${g.length} no mapa`+(r.length>g.length?` · ${r.length-g.length} sem coordenadas`:"");
   $("leg").innerHTML=ks.map(k=>`<span style="color:${cor(g.find(d=>(p==="status"?d.status:d.cat)===k),p)}">●</span> ${k} &nbsp;`).join("");
-  $("gm").style.display=KEY?"block":"none";$("om").style.display=KEY?"none":"block";
-  if(KEY&&pronto&&window.google){
+  $("gm").style.display=GM?"block":"none";$("om").style.display=GM?"none":"block";
+  if(GM&&pronto&&window.google){
    if(!M){M=new google.maps.Map($("gm"),{center:{lat:-8.05,lng:-34.9},zoom:10});IW=new google.maps.InfoWindow()}
    MK.forEach(m=>m.setMap(null));MK=[];const b=new google.maps.LatLngBounds();
    g.forEach(d=>{const q={lat:d.lat,lng:d.lon};b.extend(q);const m=new google.maps.Marker({position:q,map:M,title:d.nome,
     icon:{path:google.maps.SymbolPath.CIRCLE,scale:Math.max(7,Math.min(16,Math.sqrt(d.fam||60)*.9)),fillColor:cor(d,p),fillOpacity:.85,strokeColor:"#fff",strokeWeight:1}});
     m.addListener("click",()=>{IW.setContent(info(d));IW.open(M,m)});MK.push(m)});
    if(g.length){M.fitBounds(b,40);google.maps.event.addListenerOnce(M,"idle",()=>{if(M.getZoom()>15)M.setZoom(15)})}}
-  if(!KEY){
+  if(!GM){
    let c={lat:-8.05,lon:-34.9},z=9;
    if(g.length){const la=g.map(d=>d.lat),lo=g.map(d=>d.lon),x=Math.max(Math.max(...la)-Math.min(...la),.01)*1.4,y=Math.max(Math.max(...lo)-Math.min(...lo),.01)*1.4;
     c={lat:(Math.max(...la)+Math.min(...la))/2,lon:(Math.max(...lo)+Math.min(...lo))/2};z=Math.min(Math.log2(560*360/(512*x)),Math.log2(($("om").clientWidth||900)*360/(512*y)),12.5)}
@@ -156,7 +173,7 @@ for _, r in df.iterrows():
         nome=nome, mun=txt(r.get("MUNICIPIO")), status=txt(r.get("STATUS_PADRONIZADO"), "Não visitamos"), cat=cat,
         lid={"sim": "Sim", "nao": "Não"}.get(chave(r.get("LIDERANCA_PADRONIZADA")), NI), mv=mv,
         fund=txt(r.get("SITUACAO_FUNDIARIA")), risco=txt(r.get("RISCO_AMBIENTAL")), dem=txt(r.get("DEMANDA_CONSTRUTIVA")),
-        fam=nz(r.get("N_FAMILIAS")), enq=int(nz(r.get("ENQUETE_FLAG")) or 0), ano=ano, idade=idade, lat=la, lon=lo,
+        visita=nz(r.get("ANO_VISITA")), fam=nz(r.get("N_FAMILIAS")), enq=int(nz(r.get("ENQUETE_FLAG")) or 0), ano=ano, idade=idade, lat=la, lon=lo,
         earth=link if isinstance(link, str) and link.startswith("http") else None))
 
 try:
